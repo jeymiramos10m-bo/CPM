@@ -31,6 +31,13 @@ public class CalculoTemprano {
                     }
                 }
             }
+
+            int duracion = Integer.parseInt(matriz[i][5]);
+
+            int fin = inicio + duracion;
+
+            matriz[i][7] = String.valueOf(inicio);
+            matriz[i][8] = String.valueOf(fin);
         }
         
     }
