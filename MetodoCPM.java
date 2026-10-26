@@ -66,6 +66,9 @@ public class MetodoCPM {
             System.out.println();
         }
 
+        // Calcular inicio y final tempranos
+        CalculoTemprano.calcular(matriz, cantidad);
+        
         // Mostrar solo la matriz
         System.out.println();
         imprimirMatriz(matriz, cantidad, columnas);
