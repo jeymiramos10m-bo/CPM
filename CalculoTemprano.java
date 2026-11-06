@@ -48,7 +48,7 @@ public class CalculoTemprano {
             }
         } while (!terminado);
     }
-
+    
     // Método auxiliar para buscar el índice de una actividad por su nombre
     private static int buscarIndice(String[][] matriz, int cantidad, String nombre) {
         for (int i = 1; i <= cantidad; i++) {
