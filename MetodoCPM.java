@@ -10,10 +10,11 @@ public class MetodoCPM {
         int cantidad = sc.nextInt();
         sc.nextLine();
 
-        int columnas = 10;
+        //12 columnas por defecto
+        int columnas = 12;
         String[][] matriz = new String[cantidad + 1][columnas];
 
-        // Encabezados
+        // Encabezados 
         matriz[0][0] = "No.";
         matriz[0][1] = "Actividad";
         matriz[0][2] = "T.Opt";
@@ -21,21 +22,24 @@ public class MetodoCPM {
         matriz[0][4] = "T.Pesim";
         matriz[0][5] = "T.Esp";
         matriz[0][6] = "Predecesores";
-        matriz[0][7] = "ES";
-        matriz[0][8] = "EF";
-        matriz[0][9] = "LS/LF/Holg";
+        matriz[0][7] = "ITem";
+        matriz[0][8] = "FTem";
+        matriz[0][9] = "ITar";
+        matriz[0][10] = "FTar";
+        matriz[0][11] = "Holgura";
 
-        // Inicializar espacios vacíos
+        // Se llena con --- para indicar vacío
         for (int f = 1; f <= cantidad; f++) {
             for (int c = 0; c < columnas; c++) {
                 matriz[f][c] = "---";
             }
         }
 
-        System.out.println("\n--- Ingreso de datos ---\n");
+        System.out.println("\nIngreso de datos");
 
-        // Ingresar datos (ahora en enteros)
+        // Ciclo para ingresar cada actividad
         for (int i = 0; i < cantidad; i++) {
+            // Se va colocando el abecedario en las actividades por defecto
             String nombreAct = String.valueOf((char) ('A' + i));
             matriz[i+1][0] = String.valueOf(i + 1);
             matriz[i+1][1] = nombreAct;
@@ -54,34 +58,44 @@ public class MetodoCPM {
             int P = sc.nextInt();
             matriz[i+1][4] = String.valueOf(P);
 
-            // Cálculo y redondeo a entero
-            double tiempoEspExacto = (O + 4 * M + P) / 6.0;
+            // Calculamos Tiempo Esperado (O+4M+P)/6
+            double tiempoEspExacto = (O + 4.0 * M + P) / 6.0;
             int tiempoEsp = (int) Math.round(tiempoEspExacto);
             matriz[i+1][5] = String.valueOf(tiempoEsp);
 
-            sc.nextLine();
-            System.out.print("  Predecesor(es): ");
-            matriz[i+1][6] = sc.nextLine();
+            sc.nextLine(); 
+
+            // Pedimos predecesores separados por coma
+            System.out.print("  Predecesor: ");
+            matriz[i+1][6] = sc.nextLine().trim();
 
             System.out.println();
         }
 
-        // Calcular inicio y final tempranos
+        // Llamamos al cálculo Temprano
         CalculoTemprano.calcular(matriz, cantidad);
-        
-        // Mostrar solo la matriz
-        System.out.println();
+
+        // Creamos objeto y llamamos al cálculo Tardío
+        CalculoTardio objTardio = new CalculoTardio();
+        objTardio.calcular(matriz, cantidad);
+
+        // Creamos objeto y llamamos al cálculo Z y probabilidad
+        CalculoZ objZ = new CalculoZ(matriz, cantidad, sc);
+        objZ.calcularZSegunTuCriterio();
+
+        // Imprimimos la matriz completa
+        System.out.println("\nMatriz final");
         imprimirMatriz(matriz, cantidad, columnas);
 
         sc.close();
     }
 
+    // Método para imprimir la matriz
     public static void imprimirMatriz(String[][] matriz, int filas, int columnas) {
-        String linea = "---------------------------------------------------------------------------------------------------------------------------";
-        System.out.println(linea);
+        String linea = "------------------------------------------------------------------------------------------------------------------------------------------------";
         for (int f = 0; f <= filas; f++) {
             for (int c = 0; c < columnas; c++) {
-                System.out.printf("%-13s", matriz[f][c]);
+                System.out.printf("%-12s", matriz[f][c]);
             }
             System.out.println();
             if (f == 0) System.out.println(linea);
